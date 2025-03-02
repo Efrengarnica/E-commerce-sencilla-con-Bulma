@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>E-commerce</title>
+  <link rel="icon" href="./assets/icons8-comercio-electrónico-16.png" type="image/png" sizes="16x16">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+  <link rel="stylesheet" href="./tienda.css">
+</head>
+<body>
+
+  <!-- 3) Navbar de Bulma -->
+  <nav class="navbar has-background-black " role="navigation" aria-label="main navigation" id="navbar-id">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="#">
+        <span class="navbar-item">E-commerce</span>
+      </a>
+      <!-- Botón hamburguesa para menú en móviles -->
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarMenu">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <!-- Menú principal -->
+    <div id="navbarMenu" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item">Inicio</a>
+        <a class="navbar-item">Acerca de</a>
+        <a class="navbar-item">Contacto</a>
+      </div>
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <!-- Botón que abrirá el “modal” estilo off-canvas -->
+          <button class="button is-light" id="open-cart">
+            🛒 Carrito (<p id="totalDeProductosEnCarrito"></p>)
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenido principal -->
+  <section class="section" id="sectionId">
+    <div class="container" id="container-principal">
+        <div class="columns is-multiline" id="product-list">
+        </div>
+    </div>
+  </section>
+
+  <!-- 4) Modal que simula un off-canvas -->
+  <div class="modal offcanvas-modal" id="cart-modal">
+    <!-- Fondo oscuro (overlay) de Bulma -->
+    <div class="modal-background" id="close-modal-bg"></div>
+    <!-- Contenedor del panel lateral -->
+    <div class="modal-content">
+      <!-- Tu contenido del carrito -->
+      <div class="box" style="height: 100%;">
+        <!-- Encabezado -->
+        <header class="is-flex is-justify-content-space-between is-align-items-center">
+          <h2 class="title is-5">Tu cesta</h2>
+          <button class="delete" id="close-cart-btn"></button>
+        </header>
+        <hr>
+        
+        <!-- Productos / Contenido del carrito -->
+        <div id="divProductosCarrito">
+          <p class="has-text-grey">Tu cesta está vacía</p>
+        </div>
+
+        <hr>
+        <!-- Footer del carrito -->
+        <footer>
+            <div id="totalCarrito">
+                <p class="has-text-weight-semibold">Total: $0.00</p>
+            </div>
+            <button class="button is-success is-fullwidth">Finalizar compra</button>
+        </footer>
+      </div>
+    </div>
+  </div>
+
+<script src="./tienda.js"></script>
+</body>
+</html>
