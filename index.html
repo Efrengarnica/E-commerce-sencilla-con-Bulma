@@ -11,10 +11,10 @@
 <body>
 
   <!-- 3) Navbar de Bulma -->
-  <nav class="navbar has-background-black " role="navigation" aria-label="main navigation" id="navbar-id">
+  <nav class="navbar has-background-black" role="navigation" aria-label="main navigation" id="navbar-id">
     <div class="navbar-brand">
       <a class="navbar-item" href="#">
-        <span class="navbar-item">E-commerce</span>
+        <span class="navbar-item colorLogo">E-commerce</span>
       </a>
       <!-- Botón hamburguesa para menú en móviles -->
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarMenu">
@@ -26,9 +26,9 @@
     <!-- Menú principal -->
     <div id="navbarMenu" class="navbar-menu">
       <div class="navbar-start">
-        <a class="navbar-item">Inicio</a>
-        <a class="navbar-item">Acerca de</a>
-        <a class="navbar-item">Contacto</a>
+        <a class="navbar-item has-text-white">Inicio</a>
+        <a class="navbar-item has-text-white">Acerca de</a>
+        <a class="navbar-item has-text-white">Contacto</a>
       </div>
       <div class="navbar-end">
         <div class="navbar-item">
@@ -72,7 +72,7 @@
         <hr>
         <!-- Footer del carrito -->
         <footer>
-            <div id="totalCarrito">
+            <div class="is-flex is-justify-content-space-between" id="totalCarrito">
                 <p class="has-text-weight-semibold">Total: $0.00</p>
             </div>
             <button class="button is-success is-fullwidth">Finalizar compra</button>

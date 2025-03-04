@@ -1,4 +1,11 @@
 
+.navbar-item:hover.has-text-white {
+  color: black !important; /* Color al pasar el cursor */
+}
+
+.navbar-menu.is-active {
+  background-color: black !important;
+}
 /* 
 <!-- 2) Estilos personalizados para “forzar” el modal a ser un off-canvas -->
       Convertimos el .modal en un panel lateral:
@@ -13,11 +20,12 @@
     right: 0;
     width: 350px;        /* Ajusta el ancho a tu gusto */
     max-width: 100%;
-    height: 100vh;       /* Para que ocupe toda la altura de la pantalla */
+    min-height: 100vh;       /* Para que ocupe toda la altura de la pantalla */
     background-color: #fff;
     transform: translateX(100%); 
     transition: transform 0.3s ease;
-    overflow-y: auto;    /* Si hay muchos productos, aparece scroll */
+    overflow-y: auto;
+    height: auto;    /* Si hay muchos productos, aparece scroll */
 }
   
 /* Cuando el modal está activo, desplazamos el panel a 0 */
@@ -90,15 +98,21 @@ justify-content: space-between;
   }
 
   .bg-image-1 {
-    background-image: url('./assets/hombre.jpg');
+    background: rgba(128, 128, 128, 0.5) url("./assets/hombre.jpg");
+    background-size:cover;
+    background-repeat: no-repeat;
+    background-blend-mode:multiply;
   }
 
   .bg-image-2 {
-    background-image: url('./assets/mujer-2.jpg');
+    background: rgba(128, 128, 128, 0.5) url("./assets/mujer-2.jpg");
+    background-size:cover;
+    background-repeat: no-repeat;
+    background-blend-mode:multiply;
   }
 
   .overlay {
-    background: rgba(0, 0, 0, 0.5); /* Oscurece un poco la imagen */
+     /* Oscurece un poco la imagen */
     padding: 20px;
     border-radius: 8px;
   }
@@ -114,8 +128,29 @@ justify-content: space-between;
     background-color: rgb(197, 197, 197); 
     width: 20px; 
     height: 20px;
-     border-radius: 50%; 
-     border: none;
+    border-radius: 50%; 
+    border: none;
   }
+
+.has-background-black-transparent {
+    background-color: rgba(0, 0, 0, 0.2) !important; /* Negro con 50% de transparencia */
+    border: 1px solid white !important;
+}
+.has-background-black-transparent:hover {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.colorLogo {
+  color: white;
+}
+
+.agregarACarrito:hover{
+  background-color: rgb(92, 244, 130) !important;
+}
+
+.transition-color {
+  transition: background-color 0.5s ease;
+}
+
 
 
