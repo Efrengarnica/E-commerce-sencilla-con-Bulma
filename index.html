@@ -3,13 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Esta página es una representación de una pequeña tienda en linea, con sus productos y un carrito de compras, usando Bulma." />
+  <meta name="keywords" content="App web, html, css, JS, Bulma." />
+  <meta name="author" content="Efren Garnica Palacios" /> 
+  <meta name="language" content="Spanish" />
   <title>E-commerce</title>
   <link rel="icon" href="./assets/icons8-comercio-electrónico-16.png" type="image/png" sizes="16x16">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+   <!--  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"> -->
   <link rel="stylesheet" href="./tienda.css">
 </head>
 <body>
-  <!-- 3) Navbar de Bulma -->
+  <!-- Navbar de Bulma -->
   <nav class="navbar has-background-black" role="navigation" aria-label="main navigation" id="navbar-id">
     <div class="navbar-brand">
       <a class="navbar-item" href="#">
@@ -72,9 +77,20 @@
             <div class="is-flex is-justify-content-space-between" id="totalCarrito">
                 <p class="has-text-weight-semibold">Total: $0.00</p>
             </div>
-            <button class="button is-success is-fullwidth">Finalizar compra</button>
+            <button class="button is-success is-fullwidth" id="botonFinalizarCompra">Finalizar compra</button>
         </footer>
       </div>
+    </div>
+  </div>
+  <!-- Modal de realizar compra -->
+  <div class="modal" id="miModal">
+    <div class="modal-background"></div>
+    <div class="modal-content realizar-compra-modal">
+        <div class="box is-flex is-flex-direction-column is-justify-content-space-between realizar-compra-modal">
+            <h2 class="title">Su compra se realizó con éxito.</h2>
+            <p>Para adquirir más productos, simplemente añádalos a su carrito de compras.</p>
+            <button class="button is-danger" id="cerrarModal">Cerrar</button>
+        </div>
     </div>
   </div>
 <script src="./tienda.js"></script>

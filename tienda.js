@@ -1,12 +1,29 @@
 const divProductos = document.getElementById("product-list");
-const botonBorar = document.getElementById("botonaprieta");
+//const botonBorar = document.getElementById("botonaprieta");
 const containerPrincipal =document.getElementById("container-principal");
 const containerSection =document.getElementById("sectionId");
 const divProductosCarrito = document.getElementById("divProductosCarrito");
 const divTotalCarrito = document.getElementById("totalCarrito");
 const divTotalDeProductosEnCarrito = document.getElementById("totalDeProductosEnCarrito");
-const botonCarritoCompras = document.getElementById("open-cart");
+// Abrir/cerrar el modal estilo off-canvas
+const openCart = document.getElementById('open-cart');
+const closeCartBtn = document.getElementById('close-cart-btn');
+const closeModalBg = document.getElementById('close-modal-bg');
+const cartModal = document.getElementById('cart-modal');
 
+//Modal de finalizar compra
+const modal = document.getElementById("miModal");
+const botonCerrar = document.getElementById("cerrarModal");
+const modalBg = document.querySelector("#miModal .modal-background");
+
+//Eventos click del modal realizar compra
+[botonCerrar, modalBg].forEach(el => {
+  el.addEventListener("click", () => {
+      modal.classList.remove("is-active");
+  });
+});
+
+//Mis datos.
 const productos = {
     hombre: [
       {
@@ -290,10 +307,7 @@ const carrito = new Map();
 
 // Navbar Burger (para menú en móviles)
 document.addEventListener('DOMContentLoaded', () => {
-    const $navbarBurgers = Array.prototype.slice.call(
-      document.querySelectorAll('.navbar-burger'), 
-      0
-    );
+    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0 );
     if ($navbarBurgers.length > 0) {
       $navbarBurgers.forEach(el => {
         el.addEventListener('click', () => {
@@ -305,22 +319,87 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
-// Abrir/cerrar el modal estilo off-canvas
-const openCart = document.getElementById('open-cart');
-const closeCartBtn = document.getElementById('close-cart-btn');
-const closeModalBg = document.getElementById('close-modal-bg');
-const cartModal = document.getElementById('cart-modal');
 // Abrir
 openCart.addEventListener('click', () => {
-cartModal.classList.add('is-active');
+  cartModal.classList.add('is-active');
 });
 // Cerrar (botón X)
 closeCartBtn.addEventListener('click', () => {
-cartModal.classList.remove('is-active');
+  cartModal.classList.remove('is-active');
 });
 // Cerrar (clic en la capa oscura)
 closeModalBg.addEventListener('click', () => {
-cartModal.classList.remove('is-active');
+  cartModal.classList.remove('is-active');
+});
+
+//Aquí se manejan los addEventListener de tipo click.
+document.body.addEventListener("click", function(event){
+  event.preventDefault();
+  //Apartado para manejar los botones del inicio.
+  if(event.target.dataset.action === "presentar-elementos"){
+      if(event.target.id==="botonHombres") {
+          renderizarProductos(productos,"hombre");
+      } else{
+          renderizarProductos(productos,"mujer");
+      }
+      return;
+  }
+  //Apartado para manejar el boton agregar a carrito.
+  if(event.target.dataset.action === "agregar-a-carrito"){
+      cambiarColorBotonVerde();
+      modificarCarrito(Number(event.target.dataset.id));
+      return;
+  }
+  //Apartado para manejar los botones de agregar eliminar del carrito.
+  const botonModificarElCarro = event.target.closest("[data-action='modificarCarrito']");
+  if(botonModificarElCarro){
+      if(botonModificarElCarro.dataset.operacion) {
+          cambiarColorBotonRojo();
+          modificarCarrito(Number(botonModificarElCarro.dataset.id), botonModificarElCarro.dataset.operacion);
+      }else {
+          cambiarColorBotonVerde();
+          modificarCarrito(Number(botonModificarElCarro.dataset.id));
+      }
+      return;
+  }
+  //Apartado para manejar el boton de eliminar del carrito.
+  const botonEliminarDeCarro = event.target.closest("[data-action='eliminarDeCarrito']");
+  if(botonEliminarDeCarro) {
+      cambiarColorBotonRojo();
+      const idProducto = Number(botonEliminarDeCarro.dataset.id);
+      eliminarElementoCarrito(idProducto);
+      return;
+  }
+  //Apartado para manejar los botones de cambio de género.
+  if(event.target.dataset.accion === "presentarProductosPorGenero"){
+    const productoAEliminar = document.querySelector('[data-buscadorgenero]');
+    if (productoAEliminar) {
+        productoAEliminar.remove();
+    }
+    if(event.target.dataset.genero === "hombre"){
+      renderizarProductos(productos, "hombre");
+      renderizarProductosPorCategoria();
+    }else{
+      renderizarProductos(productos, "mujer");
+      renderizarProductosPorCategoria();
+    }
+    return;
+  }
+
+  //Apartado para manejar el boton relizar compra
+  if(event.target.id === "botonFinalizarCompra"){
+    if(carrito.size > 0){
+      finalizarCompra();
+
+    }
+  }
+});
+
+//Aquí se manejan los addEventListener de tipo input.
+document.body.addEventListener("input", function(event){
+  const query = event.target.value.toLowerCase();  
+  const resultados = productos[event.target.dataset.buscadorgenero].filter(producto => producto.title.toLowerCase().includes(query));
+  renderizarProductosConCategoriaDada(resultados);
 });
 
 function renderizarInicio(){
@@ -340,82 +419,19 @@ function renderizarInicio(){
             </div>
         </div>
     `;
-    containerSection.classList.toggle("p-0")
-    containerPrincipal.classList.toggle("m-0")
+    containerSection.classList.toggle("p-0");
+    containerPrincipal.classList.toggle("m-0");
     containerPrincipal.insertAdjacentHTML("afterbegin", portada);
 };//renderizarInicio()
 renderizarInicio();
 
-//Aquí se manejan los addEventListener de tipo click
-document.body.addEventListener("click", function(event){
-    event.preventDefault();
-    //Apartado para manejar los botones del inicio.
-    if(event.target.dataset.action==="presentar-elementos"){
-        if(event.target.id==="botonHombres") {
-            renderizarProductos(productos,"hombre");
-        } else{
-            renderizarProductos(productos,"mujer");
-        }
-        return;
-    }
-    //Apartado para manejar el boton agregar a carrito.
-    if(event.target.dataset.action==="agregar-a-carrito"){
-        cambiarColorBotonVerde();
-        modificarCarrito(Number(event.target.dataset.id));
-        return;
-    }
-    //Apartado para manejar los botones de agregar eliminar del carrito.
-    const botonModificarElCarro = event.target.closest("[data-action='modificarCarrito']");
-    if(botonModificarElCarro){
-        if(botonModificarElCarro.dataset.operacion) {
-            cambiarColorBotonRojo();
-            modificarCarrito(Number(botonModificarElCarro.dataset.id), botonModificarElCarro.dataset.operacion);
-        }else {
-            cambiarColorBotonVerde();
-            modificarCarrito(Number(botonModificarElCarro.dataset.id));
-        }
-        return;
-    }
-    //Apartado para manejar el boton de eliminar del carrito.
-    const botonEliminarDeCarro = event.target.closest("[data-action='eliminarDeCarrito']");
-    if(botonEliminarDeCarro) {
-        cambiarColorBotonRojo();
-        const idProducto = Number(botonEliminarDeCarro.dataset.id);
-        eliminarElementoCarrito(idProducto);
-        return;
-    }
-    //Apartado para manejar los botones de cambio de género
-    if(event.target.dataset.accion === "presentarProductosPorGenero"){
-      const productoAEliminar = document.querySelector('[data-buscadorgenero]');
-      if (productoAEliminar) {
-          productoAEliminar.remove();
-      }
-      if(event.target.dataset.genero==="hombre"){
-        renderizarProductos(productos,"hombre");
-        renderizarProductosPorCategoria()
-      }else{
-       
-        renderizarProductos(productos,"mujer");
-        renderizarProductosPorCategoria()
-      }
-      return;
-    }
-});
-
-//Aquí se manejan los addEventListener de tipo input
-document.body.addEventListener("input", function(event){
-    const query = event.target.value.toLowerCase();  
-    const resultados = productos[event.target.dataset.buscadorgenero].filter(producto => producto.title.toLowerCase().includes(query));
-    renderizarProductosConCategoriaDada(resultados);
-});
-
-function renderizarProductos(objeto,categoria){
-    containerPrincipal.removeChild(containerPrincipal.firstElementChild)
+function renderizarProductos(objeto, categoria){
+    containerPrincipal.removeChild(containerPrincipal.firstElementChild);
     divProductos.innerHTML="";
-    containerSection.classList.toggle("p-0")
+    containerSection.classList.toggle("p-0");
     containerPrincipal.classList.toggle("m-0");
     let menuCategorias = null;
-    if(categoria==="hombre"){
+    if(categoria === "hombre"){
       menuCategorias = `
                         <div class="tabs is-centered">
                           <ul>
@@ -438,8 +454,8 @@ function renderizarProductos(objeto,categoria){
         <div class="control">
           <input class="input" type="text" data-buscadorgenero=${categoria} placeholder="Buscar">
         </div>
-      `)
-    containerPrincipal.insertAdjacentHTML("afterbegin",menuCategorias)
+      `);
+    containerPrincipal.insertAdjacentHTML("afterbegin",menuCategorias);
     arreglo = objeto[categoria];
     arreglo.forEach(producto => {
         const tarjeta = `
@@ -479,7 +495,7 @@ function renderizarProductosConCategoriaDada(arreglo){
           <div class='sinCoincidencias is-flex is-justify-content-center is-align-items-center'> 
             <p>Sin coincidencias</p>
            </div>
-      `)
+      `);
   }
   arreglo.forEach(producto => {
     const tarjeta = `
@@ -510,14 +526,14 @@ function renderizarProductosConCategoriaDada(arreglo){
     `
     divProductos.insertAdjacentHTML("beforeend", tarjeta);
 });
-}
+};//renderizarProductosConCategoriaDada()
 
 function renderizarProductosPorCategoria(){
-  containerSection.classList.toggle("p-0")
+  containerSection.classList.toggle("p-0");
   containerPrincipal.classList.toggle("m-0");
-}
+};//renderizarProductosPorCategoria()
 
-function modificarCarrito(id, operacion = "suma") {
+function modificarCarrito(id, operacion = "suma"){
     if(operacion === "suma"){
         if (carrito.has(id)) {
             carrito.get(id).cantidadProducto += 1;
@@ -534,9 +550,9 @@ function modificarCarrito(id, operacion = "suma") {
     renderizarCarrito();
 };//modificarCarrito()
 
-function eliminarElementoCarrito(id) {
-    carrito.delete(id);
-    renderizarCarrito();
+function eliminarElementoCarrito(id){
+  carrito.delete(id);
+  renderizarCarrito();
 };//eliminarElementoCarrito()
 
 function renderizarCantidadEnCarrito(){
@@ -548,8 +564,7 @@ function renderizarCantidadEnCarrito(){
     divTotalDeProductosEnCarrito.insertAdjacentText("afterbegin", cantidadTotalDeProductos);
 };//renderizarCantidadEnCarrito()
 
-//Solo se pone en marcha cuando se empieza a modificar el carrito.
-function renderizarCarrito() {
+function renderizarCarrito(){
     renderizarCantidadEnCarrito();
     divProductosCarrito.innerHTML = "";
     if(carrito.size === 0){
@@ -591,7 +606,7 @@ function renderizarCarrito() {
     renderizarTotalCarrito();
 };//renderizarCarrito()
 
-function renderizarTotalCarrito() {
+function renderizarTotalCarrito(){
     if (carrito.size > 0){
         divTotalCarrito.innerHTML = "";
         let cantidadTotalAPagar = 0;
@@ -617,23 +632,25 @@ function renderizarTotalCarrito() {
 };//renderizarTotalCarrito()
 
 function cambiarColorBotonVerde(){
-  botonCarritoCompras.classList.add('transition-color');
-  botonCarritoCompras.style.backgroundColor = 'rgb(92, 244, 130)';
-
+  openCart.classList.add('transition-color');
+  openCart.style.backgroundColor = 'rgb(92, 244, 130)';
   setTimeout(function() {
-    botonCarritoCompras.style.backgroundColor = 'white';
+    openCart.style.backgroundColor = 'white';
   }, 500);  
 };//cambiarColorBotonVerde()
 
 function cambiarColorBotonRojo(){
-  botonCarritoCompras.classList.add('transition-color');
-  botonCarritoCompras.style.backgroundColor = 'red';
+  openCart.classList.add('transition-color');
+  openCart.style.backgroundColor = 'red';
   setTimeout(function() {
-    botonCarritoCompras.style.backgroundColor = 'white';
+    openCart.style.backgroundColor = 'white';
   }, 500);  
 };//cambiarColorBotonRojo()
 
-//Por hacer 
 function finalizarCompra(){
-
-};
+  carrito.clear();
+  renderizarCarrito();
+  renderizarTotalCarrito();
+  closeModalBg.click();
+  modal.classList.add("is-active");
+};//finalizarCompra()

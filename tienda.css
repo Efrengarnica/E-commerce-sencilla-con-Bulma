@@ -152,3 +152,7 @@ transition: background-color 0.5s ease;
   width: 100%;
   max-width: 100%;
 }
+
+.realizar-compra-modal {
+  height: 200px;
+}
