@@ -343,10 +343,10 @@ function renderizarInicio(){
     containerSection.classList.toggle("p-0")
     containerPrincipal.classList.toggle("m-0")
     containerPrincipal.insertAdjacentHTML("afterbegin", portada);
-};
+};//renderizarInicio()
 renderizarInicio();
 
-//Aquí se manejan los addEventListener
+//Aquí se manejan los addEventListener de tipo click
 document.body.addEventListener("click", function(event){
     event.preventDefault();
     //Apartado para manejar los botones del inicio.
@@ -384,12 +384,62 @@ document.body.addEventListener("click", function(event){
         eliminarElementoCarrito(idProducto);
         return;
     }
+    //Apartado para manejar los botones de cambio de género
+    if(event.target.dataset.accion === "presentarProductosPorGenero"){
+      const productoAEliminar = document.querySelector('[data-buscadorgenero]');
+      if (productoAEliminar) {
+          productoAEliminar.remove();
+      }
+      if(event.target.dataset.genero==="hombre"){
+        renderizarProductos(productos,"hombre");
+        renderizarProductosPorCategoria()
+      }else{
+       
+        renderizarProductos(productos,"mujer");
+        renderizarProductosPorCategoria()
+      }
+      return;
+    }
+});
+
+//Aquí se manejan los addEventListener de tipo input
+document.body.addEventListener("input", function(event){
+    const query = event.target.value.toLowerCase();  
+    const resultados = productos[event.target.dataset.buscadorgenero].filter(producto => producto.title.toLowerCase().includes(query));
+    renderizarProductosConCategoriaDada(resultados);
 });
 
 function renderizarProductos(objeto,categoria){
-    containerPrincipal.removeChild(containerPrincipal.firstElementChild )
+    containerPrincipal.removeChild(containerPrincipal.firstElementChild)
+    divProductos.innerHTML="";
     containerSection.classList.toggle("p-0")
-    containerPrincipal.classList.toggle("m-0")
+    containerPrincipal.classList.toggle("m-0");
+    let menuCategorias = null;
+    if(categoria==="hombre"){
+      menuCategorias = `
+                        <div class="tabs is-centered">
+                          <ul>
+                            <li class="is-active"><a data-accion="presentarProductosPorGenero" data-genero="hombre">Hombre</a></li>
+                            <li><a data-accion="presentarProductosPorGenero" data-genero="mujer">Mujer</a></li>
+                          </ul>
+                        </div>
+      `
+    }else{
+      menuCategorias = `
+                        <div class="tabs is-centered">
+                          <ul>
+                            <li><a data-accion="presentarProductosPorGenero" data-genero="hombre">Hombre</a></li>
+                            <li class="is-active"><a data-accion="presentarProductosPorGenero" data-genero="mujer">Mujer</a></li>
+                          </ul>
+                        </div>
+      `
+    }
+    containerPrincipal.insertAdjacentHTML("afterbegin",`
+        <div class="control">
+          <input class="input" type="text" data-buscadorgenero=${categoria} placeholder="Buscar">
+        </div>
+      `)
+    containerPrincipal.insertAdjacentHTML("afterbegin",menuCategorias)
     arreglo = objeto[categoria];
     arreglo.forEach(producto => {
         const tarjeta = `
@@ -420,7 +470,52 @@ function renderizarProductos(objeto,categoria){
         `
         divProductos.insertAdjacentHTML("beforeend", tarjeta);
     });
-};
+};//renderizarProductos()
+
+function renderizarProductosConCategoriaDada(arreglo){
+  divProductos.innerHTML="";
+  if(arreglo.length===0){
+    divProductos.insertAdjacentHTML("afterbegin", `
+          <div class='sinCoincidencias is-flex is-justify-content-center is-align-items-center'> 
+            <p>Sin coincidencias</p>
+           </div>
+      `)
+  }
+  arreglo.forEach(producto => {
+    const tarjeta = `
+              <div class="column is-3 mb-6 mt-6"> 
+                  <div class="card has-background-gray">
+                      <div class="card-image">
+                          <figure class="image">
+                          <img src=${producto.image} alt=${producto.title}>
+                          </figure>
+                      </div>
+                      <div class="card-content mt-0 mb-0">
+                          <div class="media">
+                          <div class="media-content">
+                              <p class="subtitle is-5">${producto.title}</p>
+                              <p class="subtitle is-6">${producto.categoria}</p>
+                          </div>
+                          </div>
+                          <div class="content">
+                          <p class="title is-6">MXN ${producto.price}</p>
+                          </div>
+                      </div>
+                      <footer class="card-footer mt-0 is-flex is-justify-content-center is-align-items-center">
+                          <button class="button is-light has-background-black has-text-white mt-3 agregarACarrito" data-action = "agregar-a-carrito" data-id = ${producto.id}>Agregar al carrito</button>
+                      </footer>
+                  </div>
+              </div>
+
+    `
+    divProductos.insertAdjacentHTML("beforeend", tarjeta);
+});
+}
+
+function renderizarProductosPorCategoria(){
+  containerSection.classList.toggle("p-0")
+  containerPrincipal.classList.toggle("m-0");
+}
 
 function modificarCarrito(id, operacion = "suma") {
     if(operacion === "suma"){
@@ -437,12 +532,12 @@ function modificarCarrito(id, operacion = "suma") {
         }     
     }
     renderizarCarrito();
-}//modificarCarrito()
+};//modificarCarrito()
 
 function eliminarElementoCarrito(id) {
     carrito.delete(id);
     renderizarCarrito();
-}//eliminarElementoCarrito()
+};//eliminarElementoCarrito()
 
 function renderizarCantidadEnCarrito(){
     divTotalDeProductosEnCarrito.innerHTML="";
@@ -451,7 +546,7 @@ function renderizarCantidadEnCarrito(){
         cantidadTotalDeProductos += producto.cantidadProducto;
     });
     divTotalDeProductosEnCarrito.insertAdjacentText("afterbegin", cantidadTotalDeProductos);
-}
+};//renderizarCantidadEnCarrito()
 
 //Solo se pone en marcha cuando se empieza a modificar el carrito.
 function renderizarCarrito() {
@@ -459,12 +554,7 @@ function renderizarCarrito() {
     divProductosCarrito.innerHTML = "";
     if(carrito.size === 0){
         divProductosCarrito.insertAdjacentHTML("beforeend",`
-                <div class="icon-mensaje-vacio">
-                    <p>Tu carrito está vacio</p>
-                    <div class="carrito-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24l0 112c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-112c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/></svg>
-                    </div>
-                </div>
+                 <p class="has-text-grey">Tu cesta está vacía</p>
             `);
     }else{
         carrito.values().forEach( valor => {
@@ -499,7 +589,7 @@ function renderizarCarrito() {
         });
     }
     renderizarTotalCarrito();
-}//renderizarCarrito()
+};//renderizarCarrito()
 
 function renderizarTotalCarrito() {
     if (carrito.size > 0){
@@ -521,9 +611,10 @@ function renderizarTotalCarrito() {
             
         `);
     } else {
-        divTotalCarrito.innerHTML = "";
+        divTotalCarrito.innerHTML="";
+        divTotalCarrito.insertAdjacentHTML("afterbegin",`<p class="has-text-weight-semibold">Total: $0.00</p>`);
     }
-}//renderizarTotalCarrito()
+};//renderizarTotalCarrito()
 
 function cambiarColorBotonVerde(){
   botonCarritoCompras.classList.add('transition-color');
@@ -532,7 +623,7 @@ function cambiarColorBotonVerde(){
   setTimeout(function() {
     botonCarritoCompras.style.backgroundColor = 'white';
   }, 500);  
-}
+};//cambiarColorBotonVerde()
 
 function cambiarColorBotonRojo(){
   botonCarritoCompras.classList.add('transition-color');
@@ -540,5 +631,9 @@ function cambiarColorBotonRojo(){
   setTimeout(function() {
     botonCarritoCompras.style.backgroundColor = 'white';
   }, 500);  
-}
+};//cambiarColorBotonRojo()
 
+//Por hacer 
+function finalizarCompra(){
+
+};

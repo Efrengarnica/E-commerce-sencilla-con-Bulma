@@ -1,4 +1,3 @@
-
 .navbar-item:hover.has-text-white {
   color: black !important; /* Color al pasar el cursor */
 }
@@ -12,7 +11,6 @@
       - El .modal-background de Bulma seguirá siendo la capa oscura
       - .modal-content se ancla a la derecha y se desliza con transform
 */
-
 /* Ajusta la clase de tu modal para que no tenga la alineación central típica */
 .modal.offcanvas-modal .modal-content {
     position: absolute;
@@ -33,14 +31,12 @@
     transform: translateX(0);
 }
 
-
-
 /* Estilo para la tarjeta */
 .card {
     width: 100%; /* Ocupa todo el espacio disponible */
     max-width: 100%; /* Limita el ancho máximo */
     height: 600px; /* Altura fija para la tarjeta */
-  }
+}
 
 /* Estilo para la imagen */
 .card-image {
@@ -78,12 +74,11 @@ justify-content: space-between;
     z-index: 1000;
 }
 
-#container-principal{
+#container-principal {
     margin-top: 15px;
     width: 100%;
     max-width: 100%;
 }
-
 
 .column-box {
     display: flex;
@@ -95,62 +90,65 @@ justify-content: space-between;
     padding: 20px;
     background-size: cover;
     background-position: center;
-  }
+}
 
-  .bg-image-1 {
-    background: rgba(128, 128, 128, 0.5) url("./assets/hombre.jpg");
-    background-size:cover;
-    background-repeat: no-repeat;
-    background-blend-mode:multiply;
-  }
+.bg-image-1 {
+  background: rgba(128, 128, 128, 0.5) url("./assets/hombre.jpg");
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-blend-mode:multiply;
+}
 
-  .bg-image-2 {
-    background: rgba(128, 128, 128, 0.5) url("./assets/mujer-2.jpg");
-    background-size:cover;
-    background-repeat: no-repeat;
-    background-blend-mode:multiply;
-  }
+.bg-image-2 {
+  background: rgba(128, 128, 128, 0.5) url("./assets/mujer-2.jpg");
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-blend-mode:multiply;
+}
 
-  .overlay {
-     /* Oscurece un poco la imagen */
-    padding: 20px;
-    border-radius: 8px;
-  }
+.overlay {
+  padding: 20px;
+  border-radius: 8px;
+}
 
-  .container-flex {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-  }
+.container-flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
 
-  .botones-carrito {
-    background-color: rgb(197, 197, 197); 
-    width: 20px; 
-    height: 20px;
-    border-radius: 50%; 
-    border: none;
-  }
+.botones-carrito {
+  background-color: rgb(197, 197, 197); 
+  width: 20px; 
+  height: 20px;
+  border-radius: 50%; 
+  border: none;
+}
 
 .has-background-black-transparent {
-    background-color: rgba(0, 0, 0, 0.2) !important; /* Negro con 50% de transparencia */
-    border: 1px solid white !important;
+  background-color: rgba(0, 0, 0, 0.2) !important; 
+  border: 1px solid white !important;
 }
+
 .has-background-black-transparent:hover {
-  background-color: rgba(0, 0, 0, 0.5) !important;
+background-color: rgba(0, 0, 0, 0.5) !important;
 }
 
 .colorLogo {
-  color: white;
+color: white;
 }
 
-.agregarACarrito:hover{
-  background-color: rgb(92, 244, 130) !important;
+.agregarACarrito:hover {
+background-color: rgb(92, 244, 130) !important;
 }
 
 .transition-color {
-  transition: background-color 0.5s ease;
+transition: background-color 0.5s ease;
 }
 
-
-
+.sinCoincidencias {
+  height: 200px;
+  width: 100%;
+  max-width: 100%;
+}
